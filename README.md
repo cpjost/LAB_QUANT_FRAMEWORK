@@ -1,98 +1,260 @@
 # LAB_QUANT_FRAMEWORK
 
-Framework quantitativo para analisar robôs exportados do Profit.
+Framework quantitativo para análise, validação e pesquisa de robôs de trading exportados do Profit.
 
-## Estrutura
+---
+
+# Objetivo
+
+O objetivo deste projeto é construir um laboratório quantitativo modular para:
+
+- validar estratégias automatizadas;
+- medir robustez estatística;
+- detectar overfitting;
+- analisar regimes de mercado;
+- realizar estudos de Monte Carlo;
+- executar Walk Forward Analysis;
+- construir portfólios quantitativos descorrelacionados.
+
+O framework foi desenvolvido para suportar:
+- robôs de WINFUT;
+- WDOFUT;
+- Forex;
+- futuros;
+- estratégias baseadas em Renko;
+- estratégias direcionais;
+- sistemas quantitativos híbridos.
+
+---
+
+# Pipeline Quantitativo
+
+```text
+CSV Profit
+    ↓
+Robot Loader
+    ↓
+Metrics Engine
+    ↓
+Regime Engine
+    ↓
+Monte Carlo
+    ↓
+Walk Forward
+    ↓
+Portfolio Engine
+```
+
+---
+
+# Estrutura do Projeto
 
 ```text
 LAB_QUANT_FRAMEWORK/
-├── data/                 # Dados de mercado OHLCV
-├── robots/               # CSVs de operações dos robôs
-├── outputs/              # Resultados organizados por robô e por mercado
-├── features/             # Futuro dataset de features
-├── reports/              # Relatórios finais
-├── monte_carlo/          # Módulos/estudos de Monte Carlo
-├── walk_forward/         # Módulos/estudos de Walk Forward
-├── portfolio_engine/     # Futuro motor de portfólio
-└── src/                  # Código-fonte principal
+
+├── data/                  # Dados OHLCV de mercado
+│
+├── robots/                # CSVs exportados do Profit
+│
+├── outputs/               # Resultados organizados por robô
+│   ├── market/
+│   └── Robo_Jost_NEW/
+│       ├── charts/
+│       ├── metrics/
+│       ├── regime/
+│       ├── monte_carlo/
+│       └── walk_forward/
+│
+├── src/
+│   ├── engines/           # Engines principais
+│   │   ├── metrics_engine.py
+│   │   ├── regime_engine.py
+│   │   └── regime_cross_engine.py
+│   │
+│   ├── loaders/           # Carregadores de robôs
+│   │   └── robot_loader.py
+│   │
+│   ├── modules/           # Módulos auxiliares
+│   │   ├── drawdown.py
+│   │   ├── streaks.py
+│   │   └── metricas_auxiliares.py
+│   │
+│   ├── utils/             # Configurações e helpers
+│   │   ├── config.py
+│   │   └── helpers.py
+│   │
+│   └── legacy/            # Scripts antigos
+│
+├── monte_carlo/
+│
+├── walk_forward/
+│
+├── portfolio_engine/
+│
+├── reports/
+│
+├── requirements.txt
+│
+└── README.md
 ```
 
-## Como adicionar um novo robô
+---
 
-1. Exporte as operações do Profit em CSV.
-2. Coloque o arquivo em `robots/`.
-3. O nome do arquivo deve ser o nome do robô, por exemplo:
+# Funcionalidades Atuais
 
-```text
-robots/Robo_Jost_NEW.csv
-```
+## Metrics Engine
 
-## Rodar análise básica
+- Profit Factor
+- Winrate
+- Média por trade
+- Drawdown máximo
+- Streaks de perdas
+- Curva de capital
+- Resultado mensal
+- Resultado diário
+- Resultado por horário
+
+---
+
+## Regime Engine
+
+- Cruzamento de trades com mercado
+- Análise por horário
+- Análise por volatilidade
+- Análise de tendência
+- Filtro de regime
+- Curvas filtradas
+
+---
+
+## Monte Carlo
+
+- Simulação de sobrevivência
+- Estudo de drawdown
+- Distribuição de capital
+- Cenários extremos
+
+---
+
+# Roadmap
+
+## Próximas Implementações
+
+- [ ] Walk Forward Engine V1
+- [ ] Portfolio Engine V1
+- [ ] Correlation Engine
+- [ ] Feature Engineering
+- [ ] ML Regime Detection
+- [ ] Dashboard Quantitativo
+- [ ] Real-time Integration
+- [ ] Risk Engine
+- [ ] Position Sizing Engine
+- [ ] Multi-Robot Supervisor
+
+---
+
+# Como instalar
 
 ```bash
-python src/metrics_engine.py --robot Robo_Jost_NEW
-```
+git clone https://github.com/cpjost/LAB_QUANT_FRAMEWORK.git
 
-Saída:
+cd LAB_QUANT_FRAMEWORK
 
-```text
-outputs/Robo_Jost_NEW/metrics/
-outputs/Robo_Jost_NEW/charts/
-```
-
-## Rodar engine de regime do mercado
-
-```bash
-python src/regime_engine.py --market-file WINFUT_F_0_5min.csv --market-name WINFUT_5min
-```
-
-Saída:
-
-```text
-outputs/market/WINFUT_5min/
-```
-
-## Cruzar trades com regime
-
-Antes, rode a engine de regime.
-
-```bash
-python src/regime_cross_engine.py --robot Robo_Jost_NEW --market-name WINFUT_5min
-```
-
-Saída:
-
-```text
-outputs/Robo_Jost_NEW/regime/
-```
-
-## Dependências
-
-```bash
 pip install -r requirements.txt
 ```
 
-## Próximos módulos
+---
 
-- `walk_forward_engine.py`
-- `monte_carlo_engine.py`
-- `feature_engine.py`
-- `score_engine.py`
-- `portfolio_engine.py`
+# Como utilizar
 
-## Observação
+## 1. Exportar operações do Profit
 
-O objetivo deste projeto não é apenas testar um robô isolado.
+Exporte o relatório operacional em CSV e coloque em:
 
-O objetivo é construir uma infraestrutura quantitativa reutilizável para validar vários robôs com:
+```text
+robots/
+```
 
-- métricas
-- drawdown
-- walk forward
-- Monte Carlo
-- regime de mercado
-- análise por lado
-- análise por horário
-- feature engineering
-- score engine
-- portfólio de estratégias
+---
+
+## 2. Rodar Loader
+
+```bash
+python src/loaders/robot_loader.py
+```
+
+---
+
+## 3. Rodar Metrics Engine
+
+```bash
+python src/engines/metrics_engine.py
+```
+
+---
+
+## 4. Rodar Regime Engine
+
+```bash
+python src/engines/regime_engine.py
+```
+
+---
+
+# Outputs
+
+Os resultados serão organizados automaticamente em:
+
+```text
+outputs/NOME_DO_ROBO/
+```
+
+Separados por:
+
+- charts
+- metrics
+- regime
+- monte_carlo
+- walk_forward
+
+---
+
+# Tecnologias Utilizadas
+
+- Python
+- Pandas
+- NumPy
+- Matplotlib
+- OpenPyXL
+
+---
+
+# Filosofia do Projeto
+
+Este projeto busca construir um laboratório quantitativo profissional baseado em:
+
+- robustez estatística;
+- sobrevivência de longo prazo;
+- análise quantitativa séria;
+- controle de risco;
+- modularização;
+- escalabilidade.
+
+O foco não é encontrar um único robô vencedor, mas construir um processo quantitativo replicável.
+
+---
+
+# Autor
+
+Carlos Peter Jost
+
+GitHub:
+https://github.com/cpjost
+
+---
+
+# Disclaimer
+
+Este projeto possui fins educacionais e de pesquisa quantitativa.
+
+Não constitui recomendação financeira.
