@@ -1,6 +1,18 @@
 # LAB_QUANT_FRAMEWORK
 
-Framework quantitativo para análise, validação e pesquisa de robôs de trading exportados do Profit.
+Framework quantitativo modular para pesquisa, validação e análise estatística de estratégias automatizadas de trading exportadas de diferentes plataformas, como Profit, MetaTrader e ambientes quantitativos customizados.
+
+O projeto foi desenvolvido para construir uma infraestrutura quantitativa reutilizável capaz de:
+
+- validar robôs exportados do Profit, MetaTrader e outras plataformas;
+- analisar robustez estatística;
+- executar Walk Forward Analysis;
+- realizar simulações de Monte Carlo;
+- detectar regimes de mercado;
+- medir drawdown e sobrevivência;
+- estruturar portfólios quantitativos descorrelacionados.
+
+O foco principal do laboratório não é encontrar um único robô vencedor, mas construir um processo quantitativo replicável, escalável e orientado à robustez.
 
 ---
 
